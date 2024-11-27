@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import EditUserModal from "../components/EditUserModel"; 
-
-
-
+import EditUserModal from "../components/EditUserModel";
 
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
+    const [permissions, setPermissions] = useState({
+        Admin: ["View", "Edit", "Create", "Delete"],
+        Editor: ["View", "Edit"],
+        Viewer: ["View"],
+    });
+
     const [newUser, setNewUser] = useState({
         name: "",
         email: "",
@@ -16,7 +18,11 @@ const AdminDashboard = () => {
         role: "Viewer", // Default role
         status: "Active", // Default status
     });
-    const navigate = useNavigate();
+
+    const [newPermission, setNewPermission] = useState({
+        role: "Viewer",
+        permissions: [],
+    });
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -76,13 +82,17 @@ const AdminDashboard = () => {
         }
     };
 
+    const handlePermissionUpdate = (role, updatedPermissions) => {
+        setPermissions((prev) => ({ ...prev, [role]: updatedPermissions }));
+    };
+
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
+        <div className="p-6 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 min-h-screen">
+            <h1 className="text-4xl font-bold text-white mb-6">Admin Dashboard</h1>
 
             {/* Add User Form */}
-            <div className="bg-white p-4 rounded-lg shadow mb-6">
-                <h2 className="text-2xl mb-4">Add New User</h2>
+            <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 className="text-2xl font-bold mb-4">Add New User</h2>
                 <form onSubmit={handleAddUser}>
                     <input
                         type="text"
@@ -131,6 +141,37 @@ const AdminDashboard = () => {
                 </form>
             </div>
 
+            {/* Permissions Management Section */}
+            <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 className="text-2xl font-bold mb-4">Manage Role Permissions</h2>
+                {Object.keys(permissions).map((role) => (
+                    <div key={role} className="mb-4">
+                        <h3 className="text-lg font-semibold mb-2">{role}</h3>
+                        <div className="flex flex-wrap gap-2">
+                            {["View", "Edit", "Create", "Delete"].map((perm) => (
+                                <button
+                                    key={perm}
+                                    className={`px-4 py-2 rounded-lg ${
+                                        permissions[role].includes(perm)
+                                            ? "bg-blue-600 text-white"
+                                            : "bg-gray-300 text-black"
+                                    }`}
+                                    onClick={() => {
+                                        const updatedPermissions = permissions[role].includes(perm)
+                                            ? permissions[role].filter((p) => p !== perm)
+                                            : [...permissions[role], perm];
+                                        handlePermissionUpdate(role, updatedPermissions);
+                                    }}
+                                >
+                                    {perm}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Users Table */}
             <table className="table-auto w-full bg-white shadow rounded-lg">
                 <thead>
                     <tr className="bg-gray-200 text-left">
@@ -164,8 +205,8 @@ const AdminDashboard = () => {
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(user._id)}
                                     className="ml-4 text-red-500 hover:underline"
+                                    onClick={() => handleDelete(user._id)}
                                 >
                                     Delete
                                 </button>
