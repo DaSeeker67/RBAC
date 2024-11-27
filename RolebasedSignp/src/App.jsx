@@ -10,7 +10,7 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Navigate to={<ProtectedRoute/> }/>} />
+                <Route path="/" element={<Login />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={<AdminDashboard />} />
                 <Route path='/editor' element={<EditorPage/>}/>
