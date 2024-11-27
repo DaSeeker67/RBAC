@@ -23,7 +23,7 @@ const EditUserModal = ({ user, onSave, onCancel }) => {
 
         try {
             const token = localStorage.getItem('token'); // Changed from 'jwt_token'
-            const response = await axios.put(`http://localhost:5000/api/users/${user._id}`, updatedUser, {
+            const response = await axios.put(`https://rbac-czit.onrender.com/api/users/${user._id}`, updatedUser, {
                 headers: { 
                     'Authorization': `Bearer ${token}` 
                 }

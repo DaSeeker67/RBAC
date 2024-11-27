@@ -22,7 +22,7 @@ const AdminDashboard = () => {
         const fetchUsers = async () => {
             const token = localStorage.getItem("token");
             try {
-                const response = await axios.get("http://localhost:5000/api/users", {
+                const response = await axios.get("https://rbac-czit.onrender.com/api/users", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUsers(response.data);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
     const handleSave = async (updatedUser) => {
         const token = localStorage.getItem("token");
         try {
-            await axios.put(`http://localhost:5000/api/users/${updatedUser._id}`, updatedUser, {
+            await axios.put(`https://rbac-czit.onrender.com/api/users/${updatedUser._id}`, updatedUser, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUsers((prev) => prev.map((u) => (u._id === updatedUser._id ? updatedUser : u)));
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
     const handleDelete = async (userId) => {
         const token = localStorage.getItem("token");
         try {
-            await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+            await axios.delete(`https://rbac-czit.onrender.com/api/users/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUsers((prev) => prev.filter((user) => user._id !== userId));
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         const token = localStorage.getItem("token");
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/register", newUser, {
+            const response = await axios.post("https://rbac-czit.onrender.com/api/auth/register", newUser, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUsers((prev) => [...prev, response.data]);
