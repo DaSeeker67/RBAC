@@ -85,7 +85,9 @@ PUT /api/users/:id: Update user role/status
 DELETE /api/users/:id: Delete user (Admin only)
 
 Project Structure
-Copyrbac-app/
+
+```
+rbac-app/
 ├── backend-rbac/
 │   ├── models/
 │   ├── routes/
